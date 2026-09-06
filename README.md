@@ -15,6 +15,10 @@
   <img src="https://img.shields.io/badge/license-MIT-green" alt="License: MIT"/>
 </p>
 
+<p align="center">
+  <a href="https://drive.google.com/drive/folders/1UtsDK-hBgYyG5c5gJs9afhokozcwJ7uu?usp=sharing"><strong>Read the Whitepaper</strong></a>
+</p>
+
 ---
 
 Pack Watcher is a research system for detecting, predicting, and surgically interrupting emergent misalignment in multi-agent AI systems. It turns "my agents went bad" from an undetected catastrophe into a measurable, intervened-upon event.
