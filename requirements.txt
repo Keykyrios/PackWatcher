@@ -1,0 +1,31 @@
+# Core ML
+torch>=2.2.0
+numpy>=1.26
+scipy>=1.12
+
+# NLP / embeddings
+sentence-transformers>=3.0
+transformers>=4.40
+
+# ML utilities
+scikit-learn>=1.4
+tqdm>=4.66
+
+# Config / IO
+pyyaml>=6.0
+requests>=2.31
+
+# Logging / display
+rich>=13.0
+
+# Database (Scar Library)
+# sqlite3 is stdlib — no extra install needed
+
+# Optional but recommended:
+# faiss-cpu>=1.8        (install with: pip install faiss-cpu)
+# spacy>=3.7            (install with: pip install spacy && python -m spacy download en_core_web_sm)
+
+# Dev / test
+pytest>=8.0
+pytest-cov>=5.0
+ruff>=0.4

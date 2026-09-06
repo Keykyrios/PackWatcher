@@ -1,0 +1,55 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "pack-watcher"
+version = "0.1.0"
+description = "Future-sight immune-brain for AI tribes: closed-loop multi-agent alignment monitor"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Pack Watcher Team" }]
+keywords = ["ai-safety", "multi-agent", "alignment", "mechanistic-interpretability"]
+
+dependencies = [
+    "torch>=2.2.0",
+    "numpy>=1.26",
+    "sentence-transformers>=3.0",
+    "scikit-learn>=1.4",
+    "scipy>=1.12",
+    "pyyaml>=6.0",
+    "rich>=13.0",
+    "tqdm>=4.66",
+    "requests>=2.31",
+]
+
+[project.optional-dependencies]
+faiss = ["faiss-cpu>=1.8"]
+spacy = ["spacy>=3.7"]
+dev = [
+    "pytest>=8.0",
+    "pytest-cov>=5.0",
+    "ruff>=0.4",
+]
+
+[project.scripts]
+pw-phase0 = "scripts.run_phase0:main"
+pw-phase1 = "scripts.run_phase1:main"
+pw-phase2 = "scripts.run_phase2:main"
+pw-phase3 = "scripts.run_phase3:main"
+pw-phase4 = "scripts.run_phase4:main"
+pw-phase5 = "scripts.run_phase5:main"
+pw-report  = "scripts.generate_report:main"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["packwatcher*", "sim*", "bench*", "train*", "scripts*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-v --tb=short"
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"

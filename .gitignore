@@ -1,0 +1,58 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+.eggs/
+*.so
+*.dylib
+
+# Virtual environments
+.venv/
+venv/
+env/
+.env/
+
+# Data (generated; not committed)
+data/
+
+# Models (large; use git-lfs or artifact storage)
+models/
+
+# Reports (generated output)
+reports/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints/
+*.ipynb
+
+# Coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Logs
+*.log
+*.jsonl
+
+# Blueprint (internal design doc, not for public repo)
+pack-watcher-blueprint.md
+
+# Paper (LaTeX source, compiled on Overleaf)
+paper/
