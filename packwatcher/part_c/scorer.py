@@ -109,9 +109,10 @@ class CoherenceScorer(nn.Module):
     from overfitting to the small simulation dataset.
     """
 
-    def __init__(self, config: ScorerConfig) -> None:
+    def __init__(self, config: ScorerConfig, device: str = "cuda") -> None:
         super().__init__()
         self.config  = config
+        self._device = device if torch.cuda.is_available() else "cpu"
         self._st     = None    # SentenceTransformer, lazy-loaded
 
         self.head = nn.Sequential(
@@ -124,7 +125,7 @@ class CoherenceScorer(nn.Module):
             nn.Dropout(config.dropout),
             nn.Linear(config.coherence_hidden // 2, 1),
             nn.Sigmoid(),
-        )
+        ).to(self._device)
         self._init_weights()
 
     def _init_weights(self) -> None:
@@ -136,18 +137,18 @@ class CoherenceScorer(nn.Module):
 
     def _get_st(self):
         global _ST_MODEL_CACHE
-        key = self.config.sentence_model_name
+        key = self.config.sentence_model_name + "_" + self._device
         if key not in _ST_MODEL_CACHE:
             try:
                 from sentence_transformers import SentenceTransformer
-                # Force CPU: downstream head is always on CPU
-                st = SentenceTransformer(key, device="cpu")
+                st = SentenceTransformer(
+                    self.config.sentence_model_name, device=self._device
+                )
                 st.eval()
                 for p in st.parameters():
                     p.requires_grad = False
                 _ST_MODEL_CACHE[key] = st
             except ImportError:
-                # sentence_transformers not installed — use hash encoder
                 _ST_MODEL_CACHE[key] = _HashSentenceEncoder(self.config.embedding_dim)
         self._st = _ST_MODEL_CACHE[key]
         return self._st
@@ -161,7 +162,7 @@ class CoherenceScorer(nn.Module):
         st     = self._get_st()
         texts  = [a.text for a in atoms] if atoms else [""]
         embs   = st.encode(texts, convert_to_tensor=True)    # [n_atoms, dim]
-        return embs.mean(dim=0)                               # [dim]
+        return embs.mean(dim=0).to(self._device)               # [dim]
 
     def forward(self, plan_embedding: torch.Tensor) -> torch.Tensor:
         """
@@ -215,11 +216,12 @@ class AvailabilityScorer:
 
     def _get_st(self):
         global _ST_MODEL_CACHE
-        key = self.config.sentence_model_name
+        dev = "cuda" if torch.cuda.is_available() else "cpu"
+        key = self.config.sentence_model_name + "_" + dev
         if key not in _ST_MODEL_CACHE:
             try:
                 from sentence_transformers import SentenceTransformer
-                st = SentenceTransformer(key, device="cpu")
+                st = SentenceTransformer(self.config.sentence_model_name, device=dev)
                 st.eval()
                 for p in st.parameters():
                     p.requires_grad = False
