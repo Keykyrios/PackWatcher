@@ -63,6 +63,23 @@ All ten metrics pass on v0.1:
 
 ---
 
+## Real-Model Validation (GPT-2)
+
+To confirm that the detection pipeline works on real transformer internals (not just simulation), we ran GPT-2 (124M) on CUDA and extracted hidden-state activations from 30 multi-turn conversations:
+
+| Method | F1 | AUROC | Acc | Data Source |
+|--------|-----|-------|-----|-------------|
+| Linear probe on hidden states | **0.966** | **0.996** | 0.969 | Real GPT-2 activations |
+| Coherence scorer (sim-trained) | 0.293 | 0.443 | 0.537 | Real GPT-2 text |
+
+**Key finding:** Real transformer activations contain a linearly separable alignment signal. The coherence scorer requires domain adaptation from simulated to real LM text.
+
+Run it yourself:
+```bash
+python -m phases.run_real_model_validation
+```
+
+
 ## Scenarios
 
 **Healthy (control):**
@@ -115,7 +132,15 @@ python -m phases.run_phase3
 #   reports/packwatch_bench_results.json
 ```
 
-### 5. Run unit tests
+### 5. Run real-model validation (requires GPU)
+
+```bash
+python -m phases.run_real_model_validation
+# Output:
+#   reports/real_model_validation.json
+```
+
+### 6. Run unit tests
 
 ```bash
 pytest tests/ -v
@@ -173,10 +198,11 @@ Then pass `--backend ollama` to `run_phase1.py` and `data_gen.py`.
 
 ```bibtex
 @software{pack_watcher_2026,
+  author = {Ghorui, Mitrajit},
   title  = {Pack Watcher: Multi-Agent Alignment Monitoring
             with Predictive Intervention},
   year   = {2026},
-  url    = {https://github.com/your-org/pack-watcher}
+  url    = {https://github.com/Keykyrios/PackWatcher}
 }
 ```
 
